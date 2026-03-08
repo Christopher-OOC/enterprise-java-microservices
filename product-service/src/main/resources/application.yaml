@@ -2,4 +2,9 @@ spring:
   application:
     name: product-service
   mongodb:
-    uri: mongodb://localhost:27017/product_db
+    host: localhost
+    port: 27017
+    database: product_db
+    username: admin
+    password: password
+    authentication-database: admin

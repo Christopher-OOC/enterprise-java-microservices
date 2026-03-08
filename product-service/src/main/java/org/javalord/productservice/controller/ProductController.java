@@ -1,9 +1,8 @@
 package org.javalord.productservice.controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.javalord.productservice.dto.ProductRequest;
-import org.javalord.productservice.model.Product;
+import org.javalord.productservice.dto.ProductResponse;
 import org.javalord.productservice.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +18,13 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product createProduct(@RequestBody ProductRequest request) {
+    public ProductResponse createProduct(@RequestBody ProductRequest request) {
         return productService.createProduct(request);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Product> listProducts() {
+    public List<ProductResponse> listProducts() {
         return productService.getAllProducts();
     }
 

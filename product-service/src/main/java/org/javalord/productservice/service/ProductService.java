@@ -3,6 +3,7 @@ package org.javalord.productservice.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.javalord.productservice.dto.ProductRequest;
+import org.javalord.productservice.dto.ProductResponse;
 import org.javalord.productservice.model.Product;
 import org.javalord.productservice.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public Product createProduct(ProductRequest productRequest) {
+    public ProductResponse createProduct(ProductRequest productRequest) {
         Product product = Product
                 .builder()
                 .name(productRequest.name())
@@ -27,10 +28,23 @@ public class ProductService {
         Product saved = productRepository.save(product);
         log.info("Product {} created", product);
 
-        return saved;
+        return new ProductResponse(
+                saved.getId(),
+                saved.getName(),
+                saved.getDescription(),
+                saved.getPrice()
+        );
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductResponse> getAllProducts() {
+        return productRepository.findAll()
+                .stream()
+                .map(product -> new ProductResponse(
+                        product.getId(),
+                        product.getName(),
+                        product.getDescription(),
+                        product.getPrice()
+                ))
+                .toList();
     }
 }
