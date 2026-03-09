@@ -5,6 +5,6 @@ spring:
     host: localhost
     port: 27017
     database: product_db
-    username: admin
-    password: password
+    username: chris
+    password: chris
     authentication-database: admin
