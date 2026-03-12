@@ -1,0 +1,8 @@
+POST http://localhost:8002/api/v1/order
+Content-Type: application/json
+
+{
+  "skuCode": "FDHJKHG",
+  "price": 2233.43,
+  "quantity": 10
+}

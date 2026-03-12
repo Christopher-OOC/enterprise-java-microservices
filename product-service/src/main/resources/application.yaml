@@ -2,9 +2,11 @@ spring:
   application:
     name: product-service
   mongodb:
-    host: localhost
+    host: product-db
     port: 27017
     database: product_db
     username: chris
     password: chris
     authentication-database: admin
+server:
+  port: 8001
