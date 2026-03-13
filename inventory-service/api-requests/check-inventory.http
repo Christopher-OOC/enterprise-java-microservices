@@ -1,0 +1,2 @@
+POST http://localhost:8003/api/v1/inventory?skuCode=tryui&quantity=23
+Content-Type: application/json

@@ -1,6 +1,7 @@
 package org.javalord.orderservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.javalord.orderservice.client.InventoryClient;
 import org.javalord.orderservice.dto.OrderRequest;
 import org.javalord.orderservice.model.Order;
 import org.javalord.orderservice.repository.OrderRepository;
@@ -13,15 +14,23 @@ import java.util.UUID;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final InventoryClient  inventoryClient;
 
     public void placeOrder(OrderRequest orderRequest) {
-        Order order = new Order();
-        order.setOrderNumber(UUID.randomUUID().toString());
-        order.setPrice(orderRequest.price());
-        order.setQuantity(orderRequest.quantity());
-        order.setSkuCode(orderRequest.skuCode());
+        var isInStock = inventoryClient.isInStock(orderRequest.skuCode(), orderRequest.quantity());
 
-        orderRepository.save(order);
+        if (isInStock) {
+            Order order = new Order();
+            order.setOrderNumber(UUID.randomUUID().toString());
+            order.setPrice(orderRequest.price());
+            order.setQuantity(orderRequest.quantity());
+            order.setSkuCode(orderRequest.skuCode());
+
+            orderRepository.save(order);
+        }
+        else {
+            throw new RuntimeException("Order product Not In Stock");
+        }
     }
 
 }

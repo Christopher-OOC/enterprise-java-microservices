@@ -1,9 +1,11 @@
 package org.javalord.inventoryservice.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.javalord.inventoryservice.repository.InventoryRepository;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class InventoryService {
@@ -11,7 +13,10 @@ public class InventoryService {
     private final InventoryRepository inventoryRepository;
 
     public boolean isInStock(String skuCode, Integer quantity) {
-        return inventoryRepository.findBySkuCodeAndQuantityIsGreaterThanEquals(skuCode, quantity);
+
+        log.info("isInStock calling");
+
+        return inventoryRepository.existsBySkuCodeAndQuantityIsGreaterThanEqual(skuCode, quantity);
     }
 
 }
