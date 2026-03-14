@@ -16,6 +16,7 @@ import static org.springframework.cloud.gateway.server.mvc.handler.HandlerFuncti
 @Configuration
 public class Routes {
 
+    // a particular request method
     @Bean
     public RouterFunction<ServerResponse> getRoutes() {
         return route().GET("/api/products/**", http())
@@ -23,18 +24,20 @@ public class Routes {
                 .build();
     }
 
+    // a particular request method
     @Bean
     public RouterFunction<ServerResponse> getRoute() {
-        return route("errtt").GET("/get", http())
+        return route("product-service").GET("/get", http())
                 .before(uri("https://example.org"))
                 .build();
     }
 
+    // for any request method
     @Bean
     public RouterFunction<ServerResponse> anyMethodRoute() {
-        return GatewayRouterFunctions.route("sddeee")
-                .route(RequestPredicates.path("/get"), HandlerFunctions.http())
-                .before(BeforeFilterFunctions.uri("https://example.org"))
+        return GatewayRouterFunctions.route("product-service")
+                .route(RequestPredicates.path("/api/products/**"), HandlerFunctions.http())
+                .before(BeforeFilterFunctions.uri("http://localhost:8001"))
                 .build();
     }
 }
