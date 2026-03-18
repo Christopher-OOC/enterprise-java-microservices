@@ -1,5 +1,73 @@
 spring:
   application:
     name: api-gateway
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8181/realms/spring-microservices-security-realm
 server:
   port: 8004
+springdoc:
+  swagger-ui:
+    urls:
+      - name: Product Service
+        url: /aggregate/product-service/v3/api-docs
+      - name: Order Service
+        url: /aggregate/order-service/v3/api-docs
+      - name: Inventory Service
+        url: /aggregate/inventory-service/v3/api-docs
+  # Actuator Endpoints
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+ # Resilience4j Properties
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 5s
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+        minimum-number-of-calls: 5
+    instances:
+      product-service-breaker:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 5s
+
+      product-service-swagger-breaker:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+
+      order-service-swagger-breaker:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+
+      inventory-service-swagger-breaker:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+  # Resilience4j Timeout Properties
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 3s
+  # Resilience4j Retry properties
+  retry:
+    configs:
+      default:
+        max-attempts: 3
+        wait-duration: 2s
+
